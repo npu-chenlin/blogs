@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en">
+<html lang="zh-cn">
   
 
     <head>
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">929</span>
+            <span class="post-count">922</span>
         </span>
     </span>
 
@@ -109,127 +109,83 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h1 id="AirSim仿真环境搭建"><a href="#AirSim仿真环境搭建" class="headerlink" title="AirSim仿真环境搭建"></a>AirSim仿真环境搭建</h1><h2 id="AirSim环境及接口配置（双目图像-ground-truth）"><a href="#AirSim环境及接口配置（双目图像-ground-truth）" class="headerlink" title="AirSim环境及接口配置（双目图像+ground truth）"></a>AirSim环境及接口配置（双目图像+ground truth）</h2><ul>
-<li><p>环境配置</p>
-<ul>
-<li>Windows 10</li>
-<li>AirSim v1.6.0</li>
-<li>Anaconda python 3.7+</li>
+  <p>本文旨在介绍AirSim在Windows下的环境配置流程。</p>
+<span id="more"></span>
+
+<h1 id="1-AirSim环境要求"><a href="#1-AirSim环境要求" class="headerlink" title="1. AirSim环境要求"></a>1. AirSim环境要求</h1><ul>
+<li>在开始前先把以下环境配置好<ul>
+<li>Windows 10+</li>
+<li>Python 3.7+</li>
+<li>Visual Studio 2019</li>
+<li>CMake 3.9+</li>
+<li>Epic Game Launcher</li>
 </ul>
 </li>
-<li><p>AirSim</p>
-<ul>
+<li>AirSim<ul>
 <li>Doc：<a target="_blank" rel="noopener" href="https://microsoft.github.io/AirSim/">https://microsoft.github.io/AirSim/</a></li>
 <li>Github: <a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim">https://github.com/microsoft/AirSim</a></li>
 <li>Environment: <a target="_blank" rel="noopener" href="https://github.com/Microsoft/AirSim/releases">https://github.com/Microsoft/AirSim/releases</a></li>
 </ul>
 </li>
-<li><p>使用</p>
+</ul>
+<h1 id="2-安装虚幻引擎"><a href="#2-安装虚幻引擎" class="headerlink" title="2. 安装虚幻引擎"></a>2. 安装虚幻引擎</h1><ol>
+<li>从<a target="_blank" rel="noopener" href="https://www.unrealengine.com/download">Epic</a>官网下载新版的Epic客户端。下载完之后需要注册E宝账号。E宝的游戏促销力度很大，经常会免费送游戏，值得一下。</li>
+<li>打开Epic，选中左侧的虚幻引擎（UnrealEngine ，UE）标签，再点击右侧的安装，选中<code>4.25版</code>安装。虽然有些仿真景观对UE版本有要求，但是实际上并不严格，不同版本也能兼容。</li>
+</ol>
+<img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/epic_game.png" class="">
+
+<h1 id="3-编译-AirSim"><a href="#3-编译-AirSim" class="headerlink" title="3. 编译 AirSim"></a>3. 编译 AirSim</h1><ol>
+<li><p>将Windows升级到最新更新版。</p>
+</li>
+<li><p>下载AirSim。从 <a target="_blank" rel="noopener" href="https://github.com/Microsoft/AirSim/releases">https://github.com/Microsoft/AirSim/releases</a> 中下载1.6.0版本的AirSim for windows。并解压到某一路径。</p>
+</li>
+<li><p>打开<code>Developer Command Prompt for VS 2019</code>，cd到刚刚解压的目录下，输入 build.cmd 。这里程序会自动从GitHub上下载<code>rpclib</code>和<code>car_assets</code>两个文件，若是下载失败可以手动下载然后移动到相应位置。</p>
 <ul>
-<li>从Release中下载编译好的UE4环境，如<code>Blocks.correct.zip</code>，并解压（PS：请尽量将环境解压到固态硬盘上，以获得更好的io速度）</li>
-<li>在<code>解压位置\Blocks.correct\Blocks\WindowsNoEditor</code>中找到<code>Blocks.exe</code>双击运行</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/rpclib/rpclib/archive/v2.2.1.zip">点击此处获得rpclib地址</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/Microsoft/AirSim/releases/download/v1.2.0/car_assets.zip">点击此处获得car_assets地址</a></p>
+<p>将手动下载的<code>rpclib-2.2.1</code>重命名为 <code>rpclib.zip</code> 扔到 <code>external\rpclib.zip</code> 下。解压 <code>car_assert.zip</code> 的 <code>SUV</code> 文件夹到 <code>Unreal\Plugins\AirSim\Content\VehicleAdv\</code>。最后重新运行<code>build.cmd</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>顺利的话，此时AirSim源码已经编译成功了。</p>
+</li>
+</ol>
+<h1 id="4-测试Block环境"><a href="#4-测试Block环境" class="headerlink" title="4. 测试Block环境"></a>4. 测试Block环境</h1><p>本节参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/267321662">https://zhuanlan.zhihu.com/p/267321662</a></p>
+<p>block环境是airsim自带嵌入的一个Unreal工程文件，可以测试Unreal和airsim是否安装配置成功。打开 “Developer Command Prompt for VS 2019”，进入 “Airsim\Unreal\Environments\Blocks” 文件夹下。进入文件夹的指令是 <code>CD Airsim\Unreal\Environments\Blocks</code>。然后运行指令 <code>update_from_git.bat</code>。运行完成之后，会在 “Airsim\Unreal\Environments\Blocks” 文件夹下生成 “Blocks.sln” 工程文件，如下图所示，双击打开此工程文件，会自动运行 Visual Studio 2019。</p>
+   <img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/blocks.jpg" class="">
+
+<p>在Visual Studio 2019中，将 “Block工程” 设为启动项目，编译选项设为 “DebugGame_Editor” 和 “Win64”，然后点击 “调试” -&gt; “开始调试”，如下图所示，这时就会打开Unreal Engine。</p>
+   <img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/vs2019_blocks.jpg" class="">
+
+<p>block环境非常简单只有几个正方体和球，当然你也可以在里面做一些其他的操作。点击上方的 “运行”，此时会跳出一个对话框，点击 “No”，就会出现一个四旋翼（如果是点击的 “Yes”，就会出现一个小车），如下图所示。如果出现了四旋翼（或者小车），则证明 AirSim 环境配置成功。</p>
+   <img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/ue_blocks.jpg" class="">
+
+<p>AirSim的配置文件位于C:\Users$YOUR USER NAME$\Documents\AirSim\settings.json文件中。将”SimMode”改为”Multirotor”就会采用四旋翼仿真。</p>
+<h1 id="免安装Epic，UE环境，直接使用"><a href="#免安装Epic，UE环境，直接使用" class="headerlink" title="免安装Epic，UE环境，直接使用"></a>免安装Epic，UE环境，直接使用</h1><ul>
+<li>从AirSim的Release中下载编译好的UE4环境，如<code>Blocks.zip</code>，并解压。</li>
+<li>在<code>解压位置\Blocks\WindowsNoEditor</code>中找到<code>Blocks.exe</code>双击运行</li>
 <li>初次运行可能需要安装<code>DirectX Runtime</code>，可以从<a target="_blank" rel="noopener" href="https://www.microsoft.com/en-hk/download/details.aspx?id=35">这里</a>下载</li>
 <li>初次运行时可以选择<strong>Car</strong>或者<strong>Multirotor</strong>，后续可以在Setting中进行修改指定一种</li>
 <li>Press <code>F1</code>可以看到设置，<code>Alt+Enter</code>可以切换全屏/窗口模式</li>
-<li>已知问题: 目前<code>1.4.0</code>版本中的<code>AbandonedPark</code>环境会出现报错，待查明，可以先体验<code>Blocks</code>环境</li>
 </ul>
-</li>
-<li><p>Setting</p>
 <ul>
+<li>关于settings.json文件配置<ul>
 <li>ref1: <a target="_blank" rel="noopener" href="https://microsoft.github.io/AirSim/settings/">https://microsoft.github.io/AirSim/settings/</a></li>
-<li>ref2: <a target="_blank" rel="noopener" href="https://github.com/Microsoft/AirSim/blob/master/docs/settings.md">https://github.com/Microsoft/AirSim/blob/master/docs/settings.md</a></li>
-<li>位置：<code>C:\Users\XXX\Documents\AirSim</code>, XXX为用户名</li>
 </ul>
 </li>
-<li><p>体验</p>
-<ul>
+<li>体验<ul>
 <li>安装airsim python包：<code>pip install airsim</code>， 显示<code>Successfully installed airsim-1.3.0 msgpack-python-0.5.6 msgpack-rpc-python-0.4.1 opencv-contrib-python-4.5.1.48 tornado-4.5.3</code></li>
 <li>运行<code>Blocks.exe</code></li>
 <li>运行<code>hello_drone.py</code></li>
 <li>其他示例代码：<a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim/tree/master/PythonClient/multirotor">https://github.com/microsoft/AirSim/tree/master/PythonClient/multirotor</a></li>
 </ul>
 </li>
-<li><p>注意</p>
-<ul>
+<li>注意<ul>
 <li>有时候会出现连接不上的情况，需要关掉UE4环境，并从任务管理器中结束所有UE4的进程，再重新打开环境进行连接</li>
 </ul>
 </li>
-<li><p>双目</p>
-<ul>
-<li>related issues: <ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim/issues/1770">https://github.com/microsoft/AirSim/issues/1770</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim/issues/2830">https://github.com/microsoft/AirSim/issues/2830</a></li>
 </ul>
-</li>
-<li>修改AirSim中的图像显示<ul>
-<li>在Setting中加入<code>SubWindows</code>:  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;SubWindows&quot;: [</span><br><span class="line">    &#123;&quot;WindowID&quot;: 0, &quot;CameraID&quot;: 1, &quot;ImageType&quot;: 0, &quot;Visible&quot;: true&#125;,</span><br><span class="line">    &#123;&quot;WindowID&quot;: 1, &quot;CameraID&quot;: 1, &quot;ImageType&quot;: 3, &quot;Visible&quot;: true&#125;,</span><br><span class="line">    &#123;&quot;WindowID&quot;: 2, &quot;CameraID&quot;: 2, &quot;ImageType&quot;: 0, &quot;Visible&quot;: true&#125;</span><br><span class="line">    ]</span><br></pre></td></tr></table></figure></li>
-<li>结果如下：<img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/airsim_subwindows.png" class=""></li>
-</ul>
-</li>
-<li>Camera ID<ul>
-<li><code>front_center, front_right, front_left, bottom_center and back_center</code>分别对应0, 1, 2, 3, 4</li>
-</ul>
-</li>
-<li>Image Type<ul>
-<li><code>Scene = 0,  DepthPlanar = 1,  DepthPerspective = 2, DepthVis = 3,  DisparityNormalized = 4, Segmentation = 5, SurfaceNormals = 6, Infrared = 7</code></li>
-</ul>
-</li>
-<li>修改相机基线长度或者分辨率<ul>
-<li>可以直接在setting中进行设置，参考<a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim/issues/1790#issuecomment-471779112">这个回答</a>。该回答也顺便解决了相机配置问题，比如分辨率什么的。</li>
-</ul>
-</li>
-<li>在python中获取左右图片和深度信息<ul>
-<li>无人机模式<ul>
-<li>在<code>settings.json</code>中确认<code>SimMode</code>为<code>Multirotor</code>模式</li>
-<li>使用<code>scripts/stereo_cam.py</code>获得图像</li>
-</ul>
-</li>
-<li>CV模式<ul>
-<li>在<code>settings.json</code>中设置<code>SimMode</code>为<code>ComputerVision</code>模式</li>
-<li>使用<code>scripts/stereo_cam_cv_mode.py</code>获得图像</li>
-<li>CV模式操作：<ul>
-<li>箭头控制前后左右</li>
-<li>Page Up/Down 控制上下</li>
-<li>W,S控制pitch</li>
-<li>A,D控制yaw</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>存在问题<ul>
-<li>获取深度图像速度慢，在默认分辨率（256*144）情况下只有5Hz（GTX1060 6G）</li>
-<li>降低深度图像分辨率可以变快，但是已经挺低的了目前</li>
-<li>获取图像时设置<code>pixels_as_float = False</code> 之后虽然速度可以到20+fps，但是深度图像无法解析</li>
-<li>相关issue：<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/AirSim/issues/1761">https://github.com/microsoft/AirSim/issues/1761</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="高速前飞仿真（6-10m-s"><a href="#高速前飞仿真（6-10m-s" class="headerlink" title="高速前飞仿真（6-10m/s)"></a>高速前飞仿真（6-10m/s)</h2><p>实现高速前飞有两种方式：</p>
-<ol>
-<li>用Multirotor模型，使用<a target="_blank" rel="noopener" href="https://microsoft.github.io/AirSim/simple_flight/">simple flight</a>控制器来对四旋翼进行控制，然后设定目标速度为8m/s即可<ul>
-<li>存在问题：高速前飞的时候俯仰角较大，视角收到影响，需要增加云台</li>
-</ul>
-</li>
-<li>直接使用<a target="_blank" rel="noopener" href="https://microsoft.github.io/AirSim/image_apis/#computer-vision-mode_1">computer vision</a>模式，但是需要离散仿真（自己写动力学）</li>
-</ol>
-<p>想法：</p>
-<p>直接使用第一种方式，先测试不带云台的情况，再测试带云台的情况（带云台之后扑翼抖动比较难弄）</p>
-<p>实现：</p>
-<ol>
-<li>测试高速前飞时候视角（不带云台）</li>
-</ol>
-<p>定速（8m/s）、定偏航速率（10°/s）：</p>
-<img src="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83Windows/blocks.gif" class="">
-
-<p>后期速度和偏航速率可由避障算法给出。 </p>
-<p>问题：前飞速度和设定值有静差，怀疑是simple flight控制精度的问题</p>
  
       <!-- reward -->
       

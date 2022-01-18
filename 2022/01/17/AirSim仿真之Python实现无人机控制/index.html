@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-cn">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>AirSim仿真之Python实现无人机控制 |  Lin</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-AirSim仿真之Python实现无人机控制"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  AirSim仿真之Python实现无人机控制
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E4%B9%8BPython%E5%AE%9E%E7%8E%B0%E6%97%A0%E4%BA%BA%E6%9C%BA%E6%8E%A7%E5%88%B6/" class="article-date">
+  <time datetime="2022-01-17T06:59:20.000Z" itemprop="datePublished">2022-01-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/AirSim%E4%BB%BF%E7%9C%9F/">AirSim仿真</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">1.1k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">7 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> airsim</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> pynput <span class="keyword">import</span> keyboard</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtWidgets <span class="keyword">import</span> QGridLayout, QMainWindow, QAction, QApplication, QWidget, QPushButton, qApp, QLabel, QHBoxLayout, QVBoxLayout, QSplitter</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtGui <span class="keyword">import</span> QIcon, QPixmap, QImage, QMatrix4x4, QQuaternion, QVector3D, QColor, QGuiApplication</span><br><span class="line"><span class="keyword">from</span> PyQt5.QtCore <span class="keyword">import</span> Qt,QTimer</span><br><span class="line"><span class="keyword">import</span> pyqtgraph <span class="keyword">as</span> pg</span><br><span class="line"><span class="keyword">from</span> pyqtgraph <span class="keyword">import</span> functions <span class="keyword">as</span> fn</span><br><span class="line"><span class="keyword">import</span> pyqtgraph.opengl <span class="keyword">as</span> gl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vel_map=&#123;</span><br><span class="line">            Qt.Key_Left : np.array((<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Right: np.array((<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Up   : np.array((<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Down : np.array((-<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_W    : np.array((<span class="number">0</span>,<span class="number">0</span>,-<span class="number">1</span>)),</span><br><span class="line">            Qt.Key_S    : np.array((<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">v_max = <span class="number">100</span>     <span class="comment"># 无人机最大飞行速度</span></span><br><span class="line">v_factor = <span class="number">15</span></span><br><span class="line">r_max = <span class="number">20</span>    <span class="comment"># 邻居选择的半径</span></span><br><span class="line">k_sep = <span class="number">7</span>     <span class="comment"># 控制算法系数</span></span><br><span class="line">k_coh = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">fov_degree = <span class="number">90</span></span><br><span class="line">height = <span class="number">144</span></span><br><span class="line">width = <span class="number">256</span></span><br><span class="line">cx = width/<span class="number">2</span></span><br><span class="line">cy = height/<span class="number">2</span></span><br><span class="line">f = height/<span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalize</span>(<span class="params">v</span>):</span></span><br><span class="line">    norm = np.linalg.norm(v)</span><br><span class="line">    <span class="keyword">if</span> norm &lt; <span class="number">0.00000001</span>: </span><br><span class="line">       <span class="keyword">return</span> v</span><br><span class="line">    <span class="keyword">return</span> v / norm</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">np2qpixmap</span>(<span class="params">np_img</span>):</span></span><br><span class="line">    frame = cv2.cvtColor(np_img, cv2.COLOR_BGR2RGB)</span><br><span class="line">    img = QImage(frame, frame.shape[<span class="number">1</span>], frame.shape[<span class="number">0</span>], QImage.Format_RGB888)</span><br><span class="line">    <span class="keyword">return</span> QPixmap.fromImage(img)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MultiUAVControl</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(MultiUAVControl, self).__init__()</span><br><span class="line">        self.client = airsim.MultirotorClient()</span><br><span class="line">        self.uav_names = self.client.listVehicles()</span><br><span class="line">        self.uav_num = <span class="built_in">len</span>(self.uav_names)</span><br><span class="line">        self.fname  = self.uav_names[-<span class="number">1</span>]</span><br><span class="line">        self.cur_UAV = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getUAVPos</span>(<span class="params">self,vehicle_name=<span class="string">&quot;SimpleFlight&quot;</span></span>):</span></span><br><span class="line">        state = self.client.simGetObjectPose(vehicle_name)</span><br><span class="line">        x = state.position.x_val</span><br><span class="line">        y = state.position.y_val</span><br><span class="line">        z = state.position.z_val</span><br><span class="line">        pos = np.array([x, y,z])</span><br><span class="line">        <span class="keyword">return</span> pos</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setCurUAV</span>(<span class="params">self,uav</span>):</span></span><br><span class="line">        <span class="keyword">if</span> uav &lt;= self.uav_num:</span><br><span class="line">            self.cur_UAV=uav</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">takeOff</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;start to takeoff&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            self.client.enableApiControl(<span class="literal">True</span>, name) </span><br><span class="line">            self.client.armDisarm(<span class="literal">True</span>, name)        </span><br><span class="line">            self.client.takeoffAsync(vehicle_name=name)</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            self.client.moveToZAsync(-<span class="number">3</span>, <span class="number">1</span>, vehicle_name=name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">land</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;start to land&quot;</span>)</span><br><span class="line">        self.client.simPause(<span class="literal">False</span>)</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            self.client.landAsync(vehicle_name=name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">moveByKeys</span>(<span class="params">self, keys</span>):</span></span><br><span class="line">        base_vel = np.array((<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>))</span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> keys:</span><br><span class="line">            <span class="keyword">if</span> k <span class="keyword">in</span> vel_map:</span><br><span class="line">                base_vel+=vel_map[k]</span><br><span class="line">        <span class="keyword">if</span>  np.linalg.norm(base_vel)  &lt;= <span class="number">0.00001</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">                pos_i = self.getUAVPos(name)</span><br><span class="line">                v_mig = v_factor* (base_vel <span class="keyword">if</span> self.cur_UAV == <span class="number">0</span> <span class="keyword">or</span> name == self.uav_names[self.cur_UAV-<span class="number">1</span>] <span class="keyword">else</span> np.zeros(<span class="number">3</span>))</span><br><span class="line">                v_sep = np.zeros(<span class="number">3</span>)</span><br><span class="line">                v_coh = np.zeros(<span class="number">3</span>)</span><br><span class="line">                neighbor = <span class="number">0</span></span><br><span class="line">                <span class="keyword">for</span> name_other <span class="keyword">in</span> self.uav_names:</span><br><span class="line">                    <span class="keyword">if</span> name != name_other:</span><br><span class="line">                        pos_j = self.getUAVPos(name_other)</span><br><span class="line">                        <span class="keyword">if</span> np.linalg.norm(pos_j - pos_i) &lt; r_max:</span><br><span class="line">                            neighbor = neighbor+<span class="number">1</span></span><br><span class="line">                            r_ij = pos_j - pos_i</span><br><span class="line">                            v_sep += -k_sep * r_ij / np.linalg.norm(r_ij)</span><br><span class="line">                            v_coh += k_coh * r_ij</span><br><span class="line">                v_sep = v_sep / <span class="built_in">max</span>(neighbor,<span class="number">1</span>)</span><br><span class="line">                v_coh = v_coh / <span class="built_in">max</span>(neighbor,<span class="number">1</span>)</span><br><span class="line">                vel = v_sep + v_coh + v_mig</span><br><span class="line">                vel = normalize(vel)*<span class="built_in">min</span>(np.linalg.norm(vel),v_max)</span><br><span class="line">                <span class="built_in">print</span>(vel)</span><br><span class="line">                self.client.moveByVelocityBodyFrameAsync(vel[<span class="number">0</span>], vel[<span class="number">1</span>],vel[<span class="number">2</span>],</span><br><span class="line">                                                         <span class="number">0.1</span>,drivetrain = airsim.DrivetrainType.ForwardOnly,</span><br><span class="line">                                                         yaw_mode=airsim.YawMode(is_rate=<span class="literal">False</span>,yaw_or_rate=<span class="number">0</span>),</span><br><span class="line">                                                         vehicle_name=name)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getImage</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        data = self.client.simGetImages([airsim.ImageRequest(<span class="number">0</span>, airsim.ImageType.Scene, <span class="literal">False</span>, <span class="literal">False</span>)],vehicle_name=name)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> np.flipud(np.frombuffer(data.image_data_uint8, dtype=np.uint8).reshape((data.height,data.width,<span class="number">3</span>)))</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getDepth</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        data = self.client.simGetImages([airsim.ImageRequest(<span class="number">0</span>, airsim.ImageType.DepthPerspective, <span class="literal">True</span>, <span class="literal">False</span>)],vehicle_name=name)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> np.array(data.image_data_float, dtype=np.float32).reshape((data.height,data.width))</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getDepthAndImage</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        data = self.client.simGetImages([airsim.ImageRequest(<span class="number">0</span>, airsim.ImageType.Scene, <span class="literal">False</span>, <span class="literal">False</span>),</span><br><span class="line">            airsim.ImageRequest(<span class="number">0</span>, airsim.ImageType.DepthPerspective, <span class="literal">True</span>, <span class="literal">False</span>) ],vehicle_name=name)</span><br><span class="line">        image = np.flipud(np.frombuffer(data[<span class="number">0</span>].image_data_uint8, dtype=np.uint8).reshape((data[<span class="number">0</span>].height,data[<span class="number">0</span>].width,<span class="number">3</span>)))</span><br><span class="line">        depth = np.array(data[<span class="number">1</span>].image_data_float, dtype=np.float32).reshape((data[<span class="number">1</span>].height,data[<span class="number">1</span>].width))</span><br><span class="line">        <span class="keyword">return</span> [image,depth]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getImages</span>(<span class="params">self</span>):</span></span><br><span class="line">        images = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            images[name]=self.getImage(name)</span><br><span class="line">        <span class="keyword">return</span> images</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getDepthes</span>(<span class="params">self</span>):</span></span><br><span class="line">        images = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            images[name]=self.getDepth(name)</span><br><span class="line">        <span class="keyword">return</span> images</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPointCloudPos</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        data = self.getDepth(name)</span><br><span class="line">        poses=[]</span><br><span class="line">        <span class="keyword">for</span> (x,y),v <span class="keyword">in</span> np.ndenumerate(data):</span><br><span class="line">             poses.append([(x-cx)/f*v,(y-cy)/f*v,v])</span><br><span class="line">        <span class="keyword">return</span> np.array(poses)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPointCloudColor</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        data = self.getImage(name)</span><br><span class="line">        <span class="keyword">return</span> data.reshape((-<span class="number">1</span>,<span class="number">3</span>))</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getPointCloud</span>(<span class="params">self,name</span>):</span></span><br><span class="line">        [image,depth] = self.getDepthAndImage(name)</span><br><span class="line">        poses=[]</span><br><span class="line">        <span class="keyword">for</span> (x,y),v <span class="keyword">in</span> np.ndenumerate(depth):</span><br><span class="line">             poses.append([(x-cx)/f*v,(y-cy)/f*v,v])</span><br><span class="line">        image = cv2.cvtColor(image,cv2.COLOR_RGB2BGR)</span><br><span class="line">        colors=image.reshape((-<span class="number">1</span>,<span class="number">3</span>))</span><br><span class="line">        <span class="keyword">return</span> [np.array(poses),np.array(colors)]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">moveToPositionAll</span>(<span class="params">self,x, y, z, velocity, </span></span></span><br><span class="line"><span class="params"><span class="function">        timeout_sec=<span class="number">3e+38</span>, drivetrain=<span class="number">0</span>, </span></span></span><br><span class="line"><span class="params"><span class="function">        lookahead=-<span class="number">1</span>, adaptive_lookahead=<span class="number">1</span></span>):</span></span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            <span class="keyword">if</span> name != self.fname:                                  </span><br><span class="line">                self.client.moveToPositionAsync(x, y, z,velocity, timeout_sec=timeout_sec, drivetrain=drivetrain,</span><br><span class="line">        lookahead=lookahead, adaptive_lookahead=adaptive_lookahead, vehicle_name=name)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.client.moveToPositionAsync(x, y, z,velocity, timeout_sec=timeout_sec, drivetrain=drivetrain,</span><br><span class="line">        lookahead=lookahead, adaptive_lookahead=adaptive_lookahead, vehicle_name=name).join()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">moveByVelocityAll</span>(<span class="params">self,vx, vy, vz, duration, drivetrain=<span class="number">0</span></span>):</span></span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> self.uav_names:</span><br><span class="line">            self.moveByVelocityAsync(vx,vy,vz,duration,drivetrain=drivetrain,vehicle_name=name)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">moveByVelocityOne</span>(<span class="params">self,vx, vy, z, duration, drivetrain=<span class="number">0</span></span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span>(<span class="params">QMainWindow</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.setWindowTitle(<span class="string">&#x27;MyScreen&#x27;</span>)</span><br><span class="line">        self.cur_key = <span class="built_in">set</span>()</span><br><span class="line">        self.uav_control = MultiUAVControl()</span><br><span class="line">        self.func_map=&#123;</span><br><span class="line">            Qt.Key_F : self.uav_control.takeOff,</span><br><span class="line">            Qt.Key_L : self.uav_control.land,</span><br><span class="line">        &#125;</span><br><span class="line">        self.vel_map=&#123;</span><br><span class="line">            Qt.Key_Left : np.array((<span class="number">0</span>,-<span class="number">1</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Right: np.array((<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Up   : np.array((<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_Down : np.array((-<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)),</span><br><span class="line">            Qt.Key_W    : np.array((<span class="number">0</span>,<span class="number">0</span>,-<span class="number">1</span>)),</span><br><span class="line">            Qt.Key_S    : np.array((<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>))</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        self.initUI()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initUI</span>(<span class="params">self</span>):</span></span><br><span class="line"></span><br><span class="line">        main_widget =QWidget()</span><br><span class="line">        layout = QGridLayout()</span><br><span class="line">        main_widget.setLayout(layout)</span><br><span class="line">        self.setCentralWidget(main_widget)</span><br><span class="line"></span><br><span class="line">        self.label = QLabel(self)</span><br><span class="line">        self.label.setFocusPolicy(Qt.FocusPolicy.ClickFocus)</span><br><span class="line">        layout.addWidget(self.label, <span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        glViewer = gl.GLViewWidget()</span><br><span class="line">        self.pcdData = gl.GLScatterPlotItem(size=<span class="number">1</span>)</span><br><span class="line">        glViewer.addItem(self.pcdData)</span><br><span class="line">        layout.addWidget(glViewer, <span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.timer = QTimer(self) </span><br><span class="line">        self.timer.timeout.connect(self.doMove)</span><br><span class="line">        self.timer.start(<span class="number">50</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_image</span>(<span class="params">self</span>):</span></span><br><span class="line">        (poses, colors) = self.uav_control.getPointCloud(<span class="string">&#x27;UAV1&#x27;</span>)</span><br><span class="line">        colors = colors/<span class="number">255</span></span><br><span class="line">        colors = np.insert(colors,<span class="number">3</span>,<span class="number">1</span>,axis=<span class="number">1</span>)</span><br><span class="line">        self.pcdData.setData(pos=poses,color=colors)</span><br><span class="line">        v_images = []</span><br><span class="line">        images_map = self.uav_control.getImages()</span><br><span class="line">        <span class="keyword">for</span> k,v <span class="keyword">in</span> images_map.items():</span><br><span class="line">            v=v.copy()</span><br><span class="line">            v=cv2.putText(v,k,(<span class="number">10</span>,v.shape[<span class="number">0</span>]//<span class="number">2</span>),cv2.FONT_HERSHEY_SIMPLEX,<span class="number">1.2</span>,(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>),<span class="number">2</span>)</span><br><span class="line">            v_images.append(v)</span><br><span class="line">        v_img = cv2.vconcat(v_images)</span><br><span class="line">        pixmap = QPixmap(np2qpixmap(v_img))</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> pixmap.isNull():</span><br><span class="line">            self.label.setPixmap(pixmap)</span><br><span class="line">            self.label.adjustSize()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">doMove</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.uav_control.moveByKeys(self.cur_key)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">keyPressEvent</span>(<span class="params">self, event</span>):</span></span><br><span class="line">        key = event.key()</span><br><span class="line">        <span class="keyword">if</span> key == Qt.Key_Escape:</span><br><span class="line">            self.timer.stop()</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self.vel_map:</span><br><span class="line">            self.cur_key.add(key)</span><br><span class="line">        <span class="keyword">elif</span> key &gt;= Qt.Key_0 <span class="keyword">and</span> key &lt;= Qt.Key_9:</span><br><span class="line">            self.uav_control.setCurUAV(key-Qt.Key_0)</span><br><span class="line">        <span class="keyword">elif</span> key <span class="keyword">in</span> self.func_map:</span><br><span class="line">            self.func_map[key]()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">keyReleaseEvent</span>(<span class="params">self, event</span>):</span></span><br><span class="line">        key=event.key()</span><br><span class="line">        <span class="keyword">if</span> key <span class="keyword">in</span> self.vel_map:</span><br><span class="line">            self.cur_key.remove(key)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app = QApplication(sys.argv)</span><br><span class="line">    ex = App()</span><br><span class="line">    ex.show()</span><br><span class="line">    sys.exit(app.exec_())</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://npu-chenlin.github.io/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E4%B9%8BPython%E5%AE%9E%E7%8E%B0%E6%97%A0%E4%BA%BA%E6%9C%BA%E6%8E%A7%E5%88%B6/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Simulation/" rel="tag">Simulation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BB%BF%E7%9C%9F/" rel="tag">仿真</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2022/01/18/Windows%E4%B8%8B%E5%BA%93%E6%96%87%E4%BB%B6%E6%9F%A5%E7%9C%8B%E4%BE%9D%E8%B5%96%E7%9A%84%E6%96%B9%E6%B3%95/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Windows下库文件查看依赖的方法
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2022/01/17/AirSim%E4%BB%BF%E7%9C%9F%E4%B9%8B%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BB%BF%E7%9C%9F%E7%8E%AF%E5%A2%83/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">AirSim仿真之创建自己的仿真环境</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022
+        <i class="ri-heart-fill heart_icon"></i> Lin Chen
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Lin"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+ 
+<script src="/js/dz.js"></script>
+ 
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>

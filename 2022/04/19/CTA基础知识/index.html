@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-cn">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>CTA基础知识 |  Lin</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css"
+      />
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    </head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-CTA基础知识"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  CTA基础知识
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="article-date">
+  <time datetime="2022-04-19T04:06:44.000Z" itemprop="datePublished">2022-04-19</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E9%87%91%E7%9F%A5%E8%AF%86/">基金知识</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.4k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>本章旨在介绍CTA，以及相关的量化策略。</p>
+<span id="more"></span>
+
+<h1 id="1-什么是CTA？"><a href="#1-什么是CTA？" class="headerlink" title="1. 什么是CTA？"></a>1. 什么是CTA？</h1><p>商品交易顾问(Commodity Trading Advisor，简称CTA)是指通过为客户提供期货、期权方面的交易建议，或者通过受管理的期货账户参与实际交易，来获得收益的机构或个人。由于CTA的交易对象通常是商品期货和金融期货，所以<strong>CTA策略</strong>也被称作<strong>管理期货（Managed Futures）策略</strong>。</p>
+<p>狭义上来说，CTA策略的研究对象只包括期货和期权，像国内的<strong>股指期货，大宗商品期货和国债期货</strong>（利率期货），这些品种是目前国内CTA策略的主要研究对象和利润来源。</p>
+<p>广义上来说，可以是大宗商品期货，国债期货（利率期货），股票，外汇（包括spots和futures），甚至期权等任何有一定历史公开量价数据的品种。</p>
+<p>国内CTA策略仍有巨大发展空间。截至2020年末，全球对冲基金行业管理的总资产为8263亿美元，其中管理期货（CTA）行业为3015亿美元。截至最新数据，目前国内私募中有6693只产品正在使用CTA策略，数量占比5.46%；而已披露数据显示该策略规模占整个私募行业1.09%。</p>
+<img src="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/number_rate.jpg" class="">
+
+<img src="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/money_rate.jpg" class="">
+
+<h1 id="2-CTA的交易对象"><a href="#2-CTA的交易对象" class="headerlink" title="2. CTA的交易对象"></a>2. CTA的交易对象</h1><p>CTA策略的交易对象主要为期货和期权。</p>
+<p>期货为是以现货为参照物，对其未来价格做出自己的判断，然后买入相对应的合约，约定未来可以以合约约定的价格卖出或者买入所对应的合约标的。</p>
+<p>CTA策略交易标的主要分为两种，分别为商品期和金融期货。常见的投资标的如下：</p>
+<ul>
+<li>商品期货：（1）农产品期货：大豆、豆油、豆粕、小麦、玉米、棉花、白糖等。（2）金属期货：铜、铝、铅、锌、镍等有色金属和黄金、白银等贵金属。（3）能源期货：原油、燃料油等。（4）黑色期货：螺纹钢、焦炭、铁矿石、螺纹钢等。（5）化工期货：天然橡胶、PTA、PVC、甲醇等。</li>
+<li>金融期货：（1） 国债期货：2年期国债期货、5年期国债期货、10年期国债期货。（2） 股指期货：沪深300股指期货（IF）、中证500股指期货（IC）上证50股指期货（IH）</li>
+</ul>
+<p>与期货相比国内能交易的期权品种相对较少。金融期权有50etf期权，沪深300etf期权和沪深300指数期权。商品期权分布在国内的四家期权交易所，比如上海期货交易所（铜、橡胶期权等）、大连商品交易所（铁矿石、豆粕期权等）、郑州商品交易所（棉花、白糖期权等）、上海国际能源交易中心（天然气期权）。</p>
+<p><strong>Tips：什么是期权？</strong></p>
+<blockquote>
+<p>期权又称为选择权，是一种衍生性金融工具。是指买方向卖方支付<a target="_blank" rel="noopener" href="http://www.yhqh.net/html/172-30/30811.htm">期权费</a>（指<a target="_blank" rel="noopener" href="http://www.yhqh.net/html/172-30/30811.htm">权利金</a>）后拥有的在未来一段时间内（指<a target="_blank" rel="noopener" href="http://www.yhqh.net/html/172-30/30935.htm">美式期权</a>）或未来某一特定日期（指<a target="_blank" rel="noopener" href="http://www.yhqh.net/html/172-30/30935.htm">欧式期权</a>）以事先规定好的价格（指履约价格）向卖方购买或出售一定数量的特定商品的权利，但不负有必须买进或卖出的义务（即期权买方拥有选择是否行使买入或卖出的权利，而期权卖方都必须无条件服从买方的选择并履行成交时的允诺）。</p>
+</blockquote>
+<h1 id="3-CTA策略子策略分类"><a href="#3-CTA策略子策略分类" class="headerlink" title="3. CTA策略子策略分类"></a>3. CTA策略子策略分类</h1><ul>
+<li><strong>人或者机器的判断逻辑可以分为主观CTA或者量化CTA</strong></li>
+</ul>
+<p>主观CTA：基于人的判断，管理人基于基本面，主观判断走势，非常考验基金管理人基于基本面、调研或操盘经验，主观来判断走势，决定买卖时点，以及出现失误时能否迅速做出调整。</p>
+<p>量化CTA：基于机器的判断，基金管理人通过分析建立数量化的交易策略模型，由模型产生的买卖信号进行投资决策，人的错误判断对量化CTA的干扰比较小。量化CTA也需要长期对数据的分析、参数的优化、模型的更新迭代，这个过程和量化选股很类似。</p>
+<ul>
+<li><strong>略分类可以分为趋势跟踪、趋势反转、套利对冲</strong></li>
+</ul>
+<p>趋势跟踪：主要通过追随已形成的价格趋势获利，在上涨趋势时持有多仓，下跌时持有空仓，当趋势结束时平仓。</p>
+<p>趋势反转：通过价格拐点从价格回归过程中获利。信号反转向上时持有多仓，显示价格反转向下时持有空仓，实现回归时进行平仓。</p>
+<p>套利对冲：通过对相关品种/合约进行交易。可以做多低估值品种，做空高估值品种；也可以从价格回归中获利，包括期现套利、跨期套利、跨品种套利、跨市场套利等。</p>
+<blockquote>
+<p>狭义上来说，传统的CTA策略都是趋势追随策略。白话来说，就是追涨杀跌。文绉绉来说，就是价格的时间序列存在系数为正的自相关关系。这类策略能挣钱的逻辑有这么几种，1是投资者对盈利和亏损比例的容忍程度是不对称的；2是当趋势不断延续时，随着做多和做空双方投资者PNL比例的增加，投资者更容易出现非理性行为，尤其是亏损的一方容易互相践踏平仓；3是价格的returns概率分布本身就是一个很大的肥尾。</p>
+<p>趋势追随策略通常胜率会比较低，而每笔交易的盈亏比会比较大，白话来说，就是亏小钱，挣大钱。没行情的时候亏小钱，有行情的时候赚大钱。市场给机会就吃一口，没机会就熬啊熬，熬啊熬。历史上多少CTA基金就是这样被熬死的，倒在了黎明前的黑暗。</p>
+<p>广义上来说，CTA策略应该是趋势追踪策略为主，反转策略为辅。就像前面所说的，趋势追踪策略容易死在黎明前，为了避免这点，或者说为了让自己更赖操，就需要一些在没行情的日子里也能喝口汤的策略，这类策略就是反转策略。和趋势追踪相关，反转策略白话来说，就是高抛低吸；文绉绉来说，就是价格的时候序列存在系数为负的自相关关系。很多人会问，价格的时间序列不是非正即负吗，怎么会又正相关，又负相关？这个问题在这儿暂时就不回答了，后续在更新。不过可以肯定告诉大家的就是这个问题的答案值个10万块钱应该没啥问题。趋势策略好写，总体都是类似的。幸福的家庭（趋势策略）都是相似的,每个不幸的家庭（反转策略）都有各自的不幸（反转）。</p>
+</blockquote>
+<ul>
+<li><strong>持仓周期策略又可以分为长周期、中周期、短周期、高频。</strong></li>
+</ul>
+<p>长周期：两周及以上，最长可达数月；波动大。</p>
+<p>中周期：1-2周，波动较大。</p>
+<p>短周期：5个交易日内，波动较小。高频：几秒到一天不等，比较稳健（俗称期货期权不过夜）。</p>
+<h1 id="4-CTA策略风险调整后收益和股票相关性"><a href="#4-CTA策略风险调整后收益和股票相关性" class="headerlink" title="4.CTA策略风险调整后收益和股票相关性"></a>4.CTA策略风险调整后收益和股票相关性</h1><p>很多人一提及CTA就会联想到期货合约较高的杠杆，认为CTA策略具有较高的风险，对其敬而远之。事实上刚好相反，CTA是相当稳健的投资策略。CTA策略因为多空转换灵活，在熊市的时候也能转向空头，套取收益，所以产品能得到较好的控制，性价比较好。</p>
+<p>另外，因期货具有在极端市场行情下表现更佳的特质，与股票相关性系数低，与股票搭配在一起可以组成非常好的资产配置方案。</p>
+<p><strong>优点一：CTA策略具备较好的风险收益比</strong></p>
+<p>CTA策略具备比较稳健的收益和比较小的回撤。</p>
+<p>我们统计了市场上近五年数据披露比较全的CTA基金，组成了一只组合，发现CTA近五年回报64%，可以超越中证500和沪深300。投资者可以体会一下。</p>
+<img src="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/CTA_returns.jpg" class="">
+
+<p>另外，CTA组合的回撤明显长期小于A股两大指数，统计数据显示组合最大回撤仅为12.04%，小于中证500的40.11%，沪深300的32.46%。下面是它们的动态回撤图：</p>
+<img src="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/CTA_withdraw.jpg" class="">
+
+<p><strong>优点二：CTA策略与股票相关性系数低</strong></p>
+<p>有研究表明合约市场（期货、期权、远期等）在极端行情下表现较为突出，因此与股票市场具有较弱相关性。因此通过将风险分散到各个品种，可以获得强势的风险调整后收益。</p>
+<img src="/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/CTA_corr.jpg" class="">
+
+<p>近五年来，中证500与沪深300指数相关性系数较强，而CTA组合与两大指数之间的相关性系数较弱，<strong>CTA与股票是非常好的组合策略。</strong></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://npu-chenlin.github.io/2022/04/19/CTA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTA%E7%9F%A5%E8%AF%86/" rel="tag">CTA知识</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96%E7%AD%96%E7%95%A5/" rel="tag">量化策略</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2022/02/20/%E5%9F%BA%E9%87%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">基金基础知识</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "BjgEkKE49BJTxJjNF2ngbd1k-gzGzoHsz",
+    app_key: "0s1gKfe816xhpqQxKaGjKUEA",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2022
+        <i class="ri-heart-fill heart_icon"></i> Lin Chen
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Lin"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/img/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.6/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true,
+  };
+</script>
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+ 
+<script src="/js/dz.js"></script>
+ 
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>
